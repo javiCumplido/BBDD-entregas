@@ -109,8 +109,8 @@ alter table Ponentes drop constraint FK_Ponentes_Charlas;
 
 -- alter table Ponentes add constraint FK_Ponentes_Charlas foreign key (idCharla) references Charlas(idCharla) on delete set null on update set null;
 
--- En este caso tenemos que observar en que campo aplicamos el cambio porque por ejemplo el cambo nombre es unico y not null, por lo que no se puede poner a null, y los demas campos null, ya estaban a null.
-update Charlas set descripcion = 'fdasfjadlkfjdñlfas' where idCharla = 3;
+-- En este caso tenemos que observar en que campo aplicamos el cambio porque por ejemplo el campo nombre es unico y not null, por lo que no se puede poner a null, y los demas campos null, ya estaban a null.
+-- update Charlas set descripcion = 'fdasfjadlkfjdñlfas' where idCharla = 3;
 
 -- Lo mismo pasa con delete
 delete Charlas where idCharla = 3;
