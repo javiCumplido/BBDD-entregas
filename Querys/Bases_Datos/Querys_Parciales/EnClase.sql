@@ -32,6 +32,8 @@ create table Ponentes(
 	constraint FK_Pontentes_Charlas foreign key(idCharla) references Charlas(idCharla)
 );
 
+alter table Ponentes drop constraint FK_Pontentes_Charlas -- Hacer cuando necesito hacer comprobaciones con FK de la tabla hija Colegios_Actividades ! No olvidar activar luego
+
 create table Asistencia(
 	idCharla smallint not null,
 	idUsuario int not null,
@@ -39,6 +41,8 @@ create table Asistencia(
 	constraint FK_Asistencia_Charlas foreign key(idCharla) references Charlas(idCharla),
 	constraint FK_Asistencia_Usuarios foreign key(idUsuario) references Usuarios(idUsuario)
 );
+
+alter table Asistencia drop constraint FK_Asistencia_Charlas -- Hacer cuando necesito hacer comprobaciones con FK de la tabla hija Colegios_Actividades ! No olvidar activar luego
 
 create table Fecha(
 	fecha smalldatetime not null,
@@ -52,6 +56,8 @@ create table Fecha_Charlas(
 	constraint FK_Charlas foreign key(idCharla) references Charlas(idCharla),
 	constraint FK_Fecha foreign key(fecha) references Fecha(fecha)
 );
+
+alter table Fecha_Charlas drop constraint FK_Charlas -- Hacer cuando necesito hacer comprobaciones con FK de la tabla hija Colegios_Actividades ! No olvidar activar luego
 
 create table Colegios (
 	idColegio int not null,
@@ -166,11 +172,15 @@ insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes)
 alter table Colegios_Actividades drop constraint FK_Colegios_Actividaves_Colegios
 alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete no action
 alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete set null -- No deja porque tenemos en la tabla colegios actividades definida como not null por lo que no podemos poner un on delete set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete set default
+alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete cascade
 
 -- ######## Charlas ########
 alter table Colegios_Actividades drop constraint FK_Colegios_Actividaves_Charlas
 alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete no action
 alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete set default -- No tieene sentido poner la restriccion on delete set default, pese a que nos lo permite. Debido a que su tipo de dato no es un dafault, al igual que ocurre con la otra tabla padre con set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete cascade
 
 -- ################# COMPROBACIONES #################
 
@@ -179,38 +189,35 @@ delete Charlas where idCharla = '1'
 delete Colegios where idColegio = '4' -- Si me deja porque no tengo la misma fila en la tabla hija
 
 -- ######## delete set null ########
-delete Charlas where idCharla = '2'
+delete Charlas where idCharla = '2' -- No tiene sentido en cuanto a la vision de la base de datos completa porque tenemos una foreign key mas de la tabla Charlas que rompe el funcionamiento de esta instrucción, pero en cuanto a la vision de la tabla Colegios_Actividades, con Colegios y Charlas aislados, si tiene sentido ya que establece el campo id Charla en la tabla hija de la fila identica en la tabla padre eliminada a null.
+delete Colegios where idColegio = '5' -- No tiene sentido en cuanto a que el tipo de dato no me va a dejar poner un null simplemente haciendo un insert, porque su tipo de deto es not null => no admite nulos
+
+-- ######## delete set default ########
+delete Charlas where idCharla = '4' -- No tiene sentido en cuanto a que el tipo de dato no tiene default y no va a cojer un valor gestionado por nosotros como default. Pese a esto la base de datos es lista y nos proporciona el valor que siempre esta por defecto si tenemos el tipo de dato como null => valor nulo.
+delete Colegios where idColegio = '2' 
 
 -- ############################ CONSULTAS DE VERIFICACIÓN ############################
 
 -- ########### CHARLAS ###########
 SELECT * FROM Charlas;
--- Resultado esperado: 6 charlas, con votoTotal entre 0 y 10
 
 -- ########### USUARIOS ###########
 SELECT * FROM Usuarios;
--- Resultado esperado: 8 usuarios, uno sin nombre, teléfonos únicos
 
 -- ########### PONENTES ###########
 SELECT * FROM Ponentes;
--- Resultado esperado: 6 ponentes, cada uno asociado a una charla
 
 -- ########### ASISTENCIA ###########
 SELECT * FROM Asistencia;
--- Resultado esperado: 13 registros de asistencia, cada combinación charla-usuario única
 
 -- ########### FECHA ###########
 SELECT * FROM Fecha;
--- Resultado esperado: 8 fechas con formato smalldatetime, días entre 5 y 12 de enero
 
 -- ########### FECHA_CHARLAS ###########
 SELECT * FROM Fecha_Charlas;
--- Resultado esperado: 8 registros, asignando charlas a fechas específicas
 
 -- ########### COLEGIOS ###########
 SELECT * FROM Colegios;
--- Resultado esperado: 5 colegios, algunos con valores por defecto
 
 -- ########### COLEGIOS_ACTIVIDADES ###########
 SELECT * FROM Colegios_Actividades;
--- Resultado es
