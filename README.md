@@ -4,6 +4,7 @@ Este repositorio contiene el desarrollo completo de una base de datos para el pr
 
 ## 📁 Estructura del Repositorio
 
+```
 BBDD-ENTREGAS/
 │
 ├── Queries/
@@ -16,6 +17,7 @@ BBDD-ENTREGAS/
 │ └── SQLQuery1.sql # Consulta general de la base de datos
 │
 └── README.md # Este archivo
+```
 
 
 ## 📋 Descripción del Proyecto
