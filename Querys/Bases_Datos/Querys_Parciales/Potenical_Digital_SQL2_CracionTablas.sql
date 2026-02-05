@@ -59,10 +59,13 @@ create table Colegios (
 	persona_contacto varchar(200) null,
 	tfno_contacto char(11) not null,
 	constraint PK_Colegios primary key (idColegio),
-	constraint DF_Colegios_nombre default 'plazas disponibles' for nombre,
-	constraint DF_Colegios_persona_contacto default 'no procede' for persona_contacto,
-	constraint DF_Colegios_tfno_contacto default 'no procede' for tfno_contacto
 )
+
+-- No me deja poner default con constraint dentro de creacion de tabla | comentar en clase 
+alter table Colegios constraint DF_Colegios_nombre default 'plazas disponibles' for nombre,
+alter table Colegios constraint DF_Colegios_persona_contacto default 'no procede' for persona_contacto,
+alter table Colegios constraint DF_Colegios_tfno_contacto default 'no procede' for tfno_contacto
+
 
 create table Colegios_Actividades (
 	idReserva int identity(1,1),
