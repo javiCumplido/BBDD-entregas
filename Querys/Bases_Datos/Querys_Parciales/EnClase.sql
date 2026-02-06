@@ -80,8 +80,8 @@ create table Colegios_Actividades (
 	fecha date not null,
 	numero_asistentes int not null
 	constraint PK_Colegios_Actividades primary key (idReserva),
-	constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete cascade,
-	constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete no action
+	constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on delete cascade,
+	constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on delete no action
 )
 
 -- ############################ INSERCIÓN DE DATOS ############################
@@ -151,6 +151,7 @@ insert into Fecha_Charlas (idCharla, fecha) values (1, '20240111 16:30:00') -- C
 insert into Fecha_Charlas (idCharla, fecha) values (2, '20240112 18:00:00') -- Charla 2 también en la tarde
 
 -- ########### COLEGIOS ###########
+insert into Colegios (idColegio, nombre, persona_contacto, tfno_contacto) values (0, 'Colegio San José', 'Juan', '911111111')
 insert into Colegios (idColegio, nombre, persona_contacto, tfno_contacto) values (1, 'Colegio San José', 'Juan Pérez', '911111111')
 insert into Colegios (idColegio, nombre, persona_contacto) values (2, 'Colegio Santa María', 'Ana López')
 insert into Colegios (idColegio, nombre, tfno_contacto) values (3, 'Colegio Ntra. Sra. del Pilar', '922222222')
@@ -162,6 +163,7 @@ insert into Colegios (idColegio, nombre, persona_contacto, tfno_contacto) values
 insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes) values (1, 1, '2024-01-05', 50)
 insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes) values (2, 2, '2024-01-06', 45)
 insert into Colegios_Actividades (idColegio, fecha, numero_asistentes) values (3, '2024-01-07', 30) -- Sin charla específica
+insert into Colegios_Actividades (idCharla, fecha, numero_asistentes) values (3, '2024-01-07', 30) -- Sin colegios específica
 insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes) values (1, 4, '2024-01-08', 55)
 insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes) values (5, 5, '2024-01-09', 40)
 insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes) values (2, 3, '2024-01-10', 60)
@@ -169,18 +171,28 @@ insert into Colegios_Actividades (idColegio, idCharla, fecha, numero_asistentes)
 -- ################# ALTER #################
 
 -- ######## Colegios ########
-alter table Colegios_Actividades drop constraint FK_Colegios_Actividaves_Colegios
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete no action
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete set null -- No deja porque tenemos en la tabla colegios actividades definida como not null por lo que no podemos poner un on delete set null
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete set default
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Colegios foreign key (idColegio) references Colegios (idColegio) on delete cascade
+alter table Colegios_Actividades drop constraint FK_Colegios_Actividades_Colegios
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on delete no action
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on delete set null -- No deja porque tenemos en la tabla colegios actividades definida como not null por lo que no podemos poner un on delete set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on delete set default
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on delete cascade
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on update no action
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on update set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on update set default
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Colegios foreign key (idColegio) references Colegios (idColegio) on update cascade
 
 -- ######## Charlas ########
-alter table Colegios_Actividades drop constraint FK_Colegios_Actividaves_Charlas
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete no action
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete set null
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete set default -- No tieene sentido poner la restriccion on delete set default, pese a que nos lo permite. Debido a que su tipo de dato no es un dafault, al igual que ocurre con la otra tabla padre con set null
-alter table Colegios_Actividades add constraint FK_Colegios_Actividaves_Charlas foreign key (idCharla) references Charlas (idCharla) on delete cascade
+alter table Colegios_Actividades drop constraint FK_Colegios_Actividades_Charlas
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on delete no action
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on delete set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on delete set default -- No tieene sentido poner la restriccion on delete set default, pese a que nos lo permite. Debido a que su tipo de dato no es un dafault, al igual que ocurre con la otra tabla padre con set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on delete cascade
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on update no action
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on update set null
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on update set default
+alter table Colegios_Actividades add constraint FK_Colegios_Actividades_Charlas foreign key (idCharla) references Charlas (idCharla) on update cascade
+
+select * from INFORMATION_SCHEMA.CONSTRAINT_TABLE_USAGE where CONSTRAINT_CATALOG = 'Potencial_Digital_SQL2'
 
 -- ################# COMPROBACIONES #################
 
@@ -195,6 +207,14 @@ delete Colegios where idColegio = '5' -- No tiene sentido en cuanto a que el tip
 -- ######## delete set default ########
 delete Charlas where idCharla = '4' -- No tiene sentido en cuanto a que el tipo de dato no tiene default y no va a cojer un valor gestionado por nosotros como default. Pese a esto la base de datos es lista y nos proporciona el valor que siempre esta por defecto si tenemos el tipo de dato como null => valor nulo.
 delete Colegios where idColegio = '2' 
+
+-- ######## delete cascade ########
+delete Charlas where idCharla = '1'
+-- delete Colegios_Actividades where idCharla = 2 or idCharla = 4
+delete Colegios where idColegio = '0' -- A pesar de que nos va a permitir eliminar de manera normal no tiene mucho sentidoi por su valor default que es (0) y si cambiamos a la restriccion set default despues de eliminar este campo en la tabla padre nos da error de foreign key
+
+-- ######## update cascade ########
+update Colegios_Actividades set idCharla = 5 where idCharla = 3
 
 -- ############################ CONSULTAS DE VERIFICACIÓN ############################
 
