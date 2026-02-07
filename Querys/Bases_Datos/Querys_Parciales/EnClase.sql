@@ -1,9 +1,9 @@
 -- ################### CREACION DE TABLAS ###################
 
-use Potencial_Digital_SQL2
+use Potencial_Digital_SQL3
 
 create table Charlas(
-	idCharla smallint identity(1,1),
+	idCharla smallint not null,
 	nombre varchar(100) not null,
 	descripcion varchar(max) null,
 	votoTotal decimal (4,2) null,
@@ -68,9 +68,9 @@ create table Colegios (
 )
 
 -- No me deja poner default con constraint dentro de creacion de tabla | comentar en clase 
-alter table Colegios constraint DF_Colegios_nombre default 'plazas disponibles' for nombre,
-alter table Colegios constraint DF_Colegios_persona_contacto default 'no procede' for persona_contacto,
-alter table Colegios constraint DF_Colegios_tfno_contacto default 'no procede' for tfno_contacto
+alter table Colegios add constraint DF_Colegios_nombre default 'plazas disponibles' for nombre
+alter table Colegios add constraint DF_Colegios_persona_contacto default 'no procede' for persona_contacto
+alter table Colegios add constraint DF_Colegios_tfno_contacto default 'no procede' for tfno_contacto
 
 
 create table Colegios_Actividades (
@@ -87,12 +87,12 @@ create table Colegios_Actividades (
 -- ############################ INSERCIÓN DE DATOS ############################
 
 -- ########### CHARLAS ###########
-insert into Charlas (nombre, votoTotal) values ('Fran', 7.00)
-insert into Charlas (nombre, descripcion, votoTotal) values ('Inteligencia Artificial', 'Charla sobre los fundamentos de IA', 8.50)
-insert into Charlas (nombre, descripcion, votoTotal) values ('Ciberseguridad', 'Importancia de la seguridad informática', 9.00)
-insert into Charlas (nombre, descripcion, votoTotal) values ('Desarrollo Web', 'Frontend y Backend con JavaScript', 7.80)
-insert into Charlas (nombre, descripcion, votoTotal) values ('Bases de Datos', 'SQL y diseño de bases de datos', 8.20)
-insert into Charlas (nombre, descripcion) values ('Cloud Computing', 'Servicios en la nube')
+insert into Charlas (idCharla, descripcion, votoTotal) values (1, 'Fran', 7.00)
+insert into Charlas (idCharla, nombre, descripcion, votoTotal) values (2, 'Inteligencia Artificial', 'Charla sobre los fundamentos de IA', 8.50)
+insert into Charlas (idCharla, nombre, descripcion, votoTotal) values (3, 'Ciberseguridad', 'Importancia de la seguridad informática', 9.00)
+insert into Charlas (idCharla, nombre, descripcion, votoTotal) values (4, 'Desarrollo Web', 'Frontend y Backend con JavaScript', 7.80)
+insert into Charlas (idCharla, nombre, descripcion, votoTotal) values (5, 'Bases de Datos', 'SQL y diseño de bases de datos', 8.20)
+insert into Charlas (idCharla, nombre, descripcion) values (6, 'Cloud Computing', 'Servicios en la nube')
 
 -- ########### USUARIOS ###########
 insert into Usuarios (nombre, telefono) values ('Carlos Ruiz', '612345678')
@@ -214,7 +214,25 @@ delete Charlas where idCharla = '1'
 delete Colegios where idColegio = '0' -- A pesar de que nos va a permitir eliminar de manera normal no tiene mucho sentidoi por su valor default que es (0) y si cambiamos a la restriccion set default despues de eliminar este campo en la tabla padre nos da error de foreign key
 
 -- ######## update cascade ########
-update Colegios_Actividades set idCharla = 5 where idCharla = 3
+update Colegios_Actividades set idCharla = 6 where idCharla = 5
+update Colegios_Actividades set idCharla = 4 where idCharla = 6
+update Charlas set idCharla = 2 where idCharla = 3
+
+-- ######## update set default ########
+update Colegios_Actividades set idCharla = 6 where idCharla = 1
+update Colegios_Actividades set idCharla = 5 where idCharla = 4
+update Charlas set idCharla = 10 where idCharla = 1
+
+-- ######## update set null ########
+update Colegios_Actividades set idCharla = 3 where idCharla = 2
+update Colegios_Actividades set idCharla = 5 where idCharla = 6
+update Charlas set idCharla = 11 where idCharla = 2
+
+-- ######## update no action ########
+update Colegios_Actividades set idCharla = 4 where idCharla = 3
+update Colegios_Actividades set idCharla = 2 where idCharla = 5
+update Charlas set idCharla = 12 where idCharla = 4
+
 
 -- ############################ CONSULTAS DE VERIFICACIÓN ############################
 

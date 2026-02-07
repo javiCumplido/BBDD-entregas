@@ -3,7 +3,7 @@
 use Potencial_Digital_SQL2
 
 create table Charlas(
-	idCharla smallint identity(1,1),
+	idCharla smallint not null, -- Sin identity para que nos permita hacer update en la tabla padre
 	nombre varchar(100) not null,
 	descripcion varchar(max) null,
 	votoTotal decimal (4,2) null,
@@ -62,8 +62,8 @@ create table Colegios (
 )
 
 -- No me deja poner default con constraint dentro de creacion de tabla | comentar en clase 
-alter table Colegios constraint DF_Colegios_nombre default 'plazas disponibles' for nombre,
-alter table Colegios constraint DF_Colegios_persona_contacto default 'no procede' for persona_contacto,
+alter table Colegios constraint DF_Colegios_nombre default 'plazas disponibles' for nombre
+alter table Colegios constraint DF_Colegios_persona_contacto default 'no procede' for persona_contacto
 alter table Colegios constraint DF_Colegios_tfno_contacto default 'no procede' for tfno_contacto
 
 
